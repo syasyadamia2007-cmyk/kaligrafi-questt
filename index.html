@@ -1,1 +1,643 @@
 
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALIGRAFI QUEST</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  color: #66516f;
+  background: linear-gradient(135deg,#fff1f7,#f0edff,#e9f7ff);
+  min-height: 100vh;
+}
+
+header {
+  padding: 17px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffffc9;
+  box-shadow: 0 3px 15px #c9b4d333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo { font-size: 20px; font-weight: bold; color: #b36b9b; }
+
+button {
+  border: none;
+  border-radius: 18px;
+  padding: 12px 20px;
+  background: #edb9d5;
+  color: #694c70;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  transition: .2s;
+}
+
+button:hover { transform: translateY(-2px); filter: brightness(1.04); }
+
+.music {
+  position: fixed;
+  right: 17px;
+  bottom: 17px;
+  z-index: 99;
+  background: #dcd3ff;
+  box-shadow: 0 4px 14px #927ab344;
+}
+
+.container {
+  width: min(950px,92%);
+  margin: 30px auto;
+}
+
+.panel {
+  background: #ffffffd9;
+  border-radius: 25px;
+  padding: 27px;
+  margin: 18px 0;
+  box-shadow: 0 8px 25px #bda6d322;
+}
+
+.hero {
+  text-align: center;
+  padding: 55px 20px;
+}
+
+.bunny {
+  font-size: 90px;
+  animation: bounce 2s infinite ease-in-out;
+  display: inline-block;
+}
+
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-13px); }
+}
+
+h1 { color: #b36b9b; font-size: clamp(28px,5vw,46px); }
+h2 { color: #9a78b8; }
+p { line-height: 1.7; }
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid #ead8f0;
+  border-radius: 13px;
+  margin: 8px 0 16px;
+  font: inherit;
+  color: #66516f;
+  background: white;
+}
+
+textarea { min-height: 90px; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+  gap: 15px;
+}
+
+.tile {
+  background: #fff7fb;
+  border: 2px solid #f1d9e9;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.tile .emoji { font-size: 37px; }
+
+.small { font-size: 13px; color: #947f9d; }
+
+.progress {
+  height: 13px;
+  border-radius: 20px;
+  background: #eee5f5;
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg,#efb7d5,#bcb0f5);
+  width: 0%;
+  transition: .4s;
+}
+
+.hidden { display: none !important; }
+
+.option {
+  display: block;
+  text-align: left;
+  width: 100%;
+  margin: 9px 0;
+  background: #f4efff;
+}
+
+.option.selected { background: #d9f0e6; }
+
+footer { text-align:center; padding:30px; color:#a28da8; }
+
+@media(max-width:600px) {
+  header { padding: 13px; }
+  .logo { font-size: 16px; }
+  .panel { padding: 19px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🐰 KALIGRAFI QUEST</div>
+  <button onclick="goHome()">🏠 Utama</button>
+</header>
+
+<button class="music" id="musicBtn" onclick="toggleMusic()">
+  🎵 Mainkan muzik
+</button>
+
+<main class="container">
+
+<!-- HALAMAN UTAMA -->
+<section id="home" class="panel hero">
+  <div class="bunny">🐰</div>
+  <h1>KALIGRAFI QUEST</h1>
+  <h2>Misi: Selamatkan Warisan Tulisan Berangkai!</h2>
+  <p>
+    Selamat datang, Agen Aksara! Kiko memerlukan bantuan awak
+    untuk mengembalikan keindahan seni tulisan berangkai.
+  </p>
+  <p>Belajar, bermain dan terokai dunia aksara bersama Kiko!</p>
+  <button onclick="showPage('login')">✨ Mula Pengembaraan</button>
+</section>
+
+<!-- LOG MASUK -->
+<section id="login" class="panel hidden">
+  <div class="bunny">🐰</div>
+  <h1>Selamat Datang, Agen!</h1>
+  <p>Pilih peranan dan masukkan nama atau kod akses.</p>
+
+  <label>Peranan</label>
+  <select id="role">
+    <option value="murid">Murid</option>
+    <option value="guru">Guru</option>
+    <option value="admin">Admin</option>
+  </select>
+
+  <label>Nama / Kod akses</label>
+  <input id="username" placeholder="Masukkan nama atau kod">
+
+  <button onclick="login()">Masuk ke Dunia Aksara 💗</button>
+  <p class="small">
+    Kod demo guru: GURU-KQ | Admin: ADMIN-KQ
+  </p>
+</section>
+
+<!-- DASHBOARD MURID -->
+<section id="student" class="hidden">
+  <div class="panel">
+    <h1>🌷 Dashboard Agen</h1>
+    <h2 id="welcome">Hai, Agen Aksara!</h2>
+    <p>Teruskan pengembaraan dan kumpulkan ganjaran!</p>
+
+    <div class="grid">
+      <div class="tile">
+        <div class="emoji">⭐</div>
+        <h2 id="xp">0 XP</h2>
+        <p>Pengalaman</p>
+      </div>
+      <div class="tile">
+        <div class="emoji">🏅</div>
+        <h2 id="level">Tahap 1</h2>
+        <p>Level Agen</p>
+      </div>
+      <div class="tile">
+        <div class="emoji">📚</div>
+        <h2 id="completed">0/6</h2>
+        <p>Fasa Selesai</p>
+      </div>
+    </div>
+
+    <h3>Perjalanan Agen Aksara</h3>
+    <div class="progress"><span id="bar"></span></div>
+  </div>
+
+  <div class="panel">
+    <h2>🗺️ Peta Pengembaraan</h2>
+    <div class="grid" id="phaseGrid"></div>
+  </div>
+</section>
+
+<!-- DASHBOARD GURU -->
+<section id="teacher" class="panel hidden">
+  <div class="bunny">👩🏻‍🏫</div>
+  <h1>Dashboard Guru</h1>
+  <p>Selamat datang ke pusat pemantauan pembelajaran.</p>
+  <div class="tile">
+    <h2>📊 Pemantauan Murid</h2>
+    <p>Rekod kemajuan dan hasil tugasan murid akan dipaparkan
+    di sini apabila sistem pangkalan data disambungkan.</p>
+  </div>
+  <button onclick="showPage('student')">Lihat paparan murid</button>
+</section>
+
+<!-- DASHBOARD ADMIN -->
+<section id="admin" class="panel hidden">
+  <div class="bunny">🛠️</div>
+  <h1>Dashboard Admin</h1>
+  <p>Pusat pengurusan KALIGRAFI QUEST.</p>
+  <div class="grid">
+    <div class="tile">👥<h3>Pengurusan Akaun</h3>
+      <p>Ruang pengurusan pengguna.</p></div>
+    <div class="tile">📖<h3>Pengurusan Kandungan</h3>
+      <p>Ruang pengurusan bahan pembelajaran.</p></div>
+    <div class="tile">⚙️<h3>Tetapan Sistem</h3>
+      <p>Ruang tetapan aplikasi.</p></div>
+  </div>
+</section>
+
+<!-- KANDUNGAN FASA -->
+<section id="phase" class="panel hidden">
+  <button onclick="showPage('student')">← Kembali ke Peta</button>
+  <div id="phaseContent"></div>
+</section>
+
+</main>
+
+<footer>
+  KALIGRAFI QUEST © 2026 | Belajar dengan Kiko 🐰
+</footer>
+
+<script>
+/* SISTEM MUZIK COMEL DAN TENANG */
+let audio;
+let musicTimer;
+let musicOn = false;
+let note = 0;
+
+const tune = [
+  523.25,659.25,783.99,659.25,
+  587.33,659.25,523.25,392,
+  440,523.25,659.25,523.25,
+  493.88,440,392,440
+];
+
+function sound(frequency, volume = 0.045, duration = 1) {
+  if (!audio) return;
+
+  const osc = audio.createOscillator();
+  const gain = audio.createGain();
+
+  osc.type = "sine";
+  osc.frequency.value = frequency;
+
+  gain.gain.setValueAtTime(0.0001,audio.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    volume,audio.currentTime + 0.08
+  );
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,audio.currentTime + duration
+  );
+
+  osc.connect(gain);
+  gain.connect(audio.destination);
+  osc.start();
+  osc.stop(audio.currentTime + duration + 0.05);
+}
+
+function toggleMusic() {
+  if (!audio) {
+    audio = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  audio.resume();
+
+  const btn = document.getElementById("musicBtn");
+
+  if (musicOn) {
+    clearInterval(musicTimer);
+    musicOn = false;
+    btn.textContent = "🎵 Mainkan muzik";
+  } else {
+    musicOn = true;
+    btn.textContent = "🔇 Matikan muzik";
+
+    sound(tune[note],0.045,1.1);
+    note = (note + 1) % tune.length;
+
+    musicTimer = setInterval(() => {
+      sound(tune[note],0.045,1.1);
+      note = (note + 1) % tune.length;
+    },650);
+  }
+}
+
+/* KESAN BUNYI BUTANG */
+function clickSound() {
+  if (audio && musicOn) sound(880,0.025,0.2);
+}
+
+/* DATA APLIKASI */
+let currentName = "";
+let xp = 0;
+let finished = [];
+
+const phases = [
+  {
+    title:"Pusat Pembelajaran",
+    icon:"📚",
+    subtitle:"Kenali dunia tulisan berangkai.",
+    content:`
+      <h2>Fasa 1: Pusat Pembelajaran</h2>
+      <p>Selamat datang ke pusat ilmu, Agen Aksara!</p>
+      <div class="tile">
+        <h3>🎬 Video Pembelajaran</h3>
+        <p>Ruang video pembelajaran akan dimasukkan kemudian.</p>
+      </div>
+      <div class="tile">
+        <h3>📖 Nota Interaktif</h3>
+        <p>Ruang nota pembelajaran akan dimasukkan kemudian.</p>
+      </div>`
+  },
+  {
+    title:"Akademi Aksara",
+    icon:"✍️",
+    subtitle:"Latih kemahiran membentuk dan menyambung huruf.",
+    content:`
+      <h2>Fasa 2: Akademi Aksara</h2>
+      <p>Inilah tempat awak berlatih menjadi pakar tulisan berangkai.</p>
+      <div class="tile">
+        <h3>🔤 Permainan Bentuk Huruf</h3>
+        <p>Ruang permainan membentuk huruf akan dimasukkan kemudian.</p>
+      </div>
+      <div class="tile">
+        <h3>🧩 Permainan Sambung Huruf</h3>
+        <p>Ruang permainan menyambung huruf akan dimasukkan kemudian.</p>
+      </div>`
+  },
+  {
+    title:"Detektif Tulisan",
+    icon:"🔍",
+    subtitle:"Kenal pasti tulisan yang kemas dan tepat.",
+    content:`
+      <h2>Fasa 3: Detektif Tulisan</h2>
+      <p>Pilih contoh tulisan yang lebih kemas dan mudah dibaca.</p>
+      <div id="detective"></div>`
+  },
+  {
+    title:"Ekspedisi Aksara",
+    icon:"🏡",
+    subtitle:"Teroka penggunaan tulisan dalam kehidupan sebenar.",
+    content:`
+      <h2>Fasa 4: Ekspedisi Aksara</h2>
+      <p>
+        Cari contoh tulisan tangan seperti nota, resipi atau kad
+        daripada ahli keluarga dengan kebenaran mereka.
+      </p>
+      <div class="tile">📷 Perhatikan bentuk huruf dan sambungan tulisan.</div>
+      <label>Catat pemerhatian awak</label>
+      <textarea id="observation" placeholder="Apakah yang awak perhatikan?"></textarea>
+      <p class="small">Aktiviti ini boleh dilakukan di rumah bersama keluarga.</p>`
+  },
+  {
+    title:"Misi Puisi Berangkai",
+    icon:"📝",
+    subtitle:"Salin puisi menggunakan tulisan berangkai.",
+    content:`
+      <h2>Fasa 5: Misi Puisi Berangkai</h2>
+      <p>Salin puisi yang diberikan oleh guru pada kertas menggunakan tulisan berangkai.</p>
+      <div class="tile">
+        <h3>🌸 Puisi: Keindahan Alam</h3>
+        <p>
+          Bunga berkembang indah berseri,<br>
+          Burung berkicau di pagi hari,<br>
+          Alam dijaga sepenuh hati,<br>
+          Bumi sejahtera kekal lestari.
+        </p>
+      </div>
+      <p>Ambil gambar hasil tulisan awak dan serahkan kepada guru melalui kaedah yang ditetapkan.</p>
+      <input type="file" id="poemPhoto" accept="image/*">
+      <button onclick="uploadPhoto()">📷 Pilih Gambar</button>
+      <p id="uploadStatus" class="small"></p>`
+  },
+  {
+    title:"Penilaian Agen Aksara",
+    icon:"🏆",
+    subtitle:"Nilai hasil tulisan melalui senarai semak 5S.",
+    content:`
+      <h2>Fasa 6: Penilaian Agen Aksara</h2>
+      <p>Semak hasil tulisan awak menggunakan senarai semak 5S.</p>
+      <div id="checklist"></div>
+      <button onclick="finishChecklist()">Hantar Penilaian</button>`
+  }
+];
+
+/* NAVIGASI */
+function showPage(id) {
+  document.querySelectorAll("main > section").forEach(s => {
+    s.classList.add("hidden");
+  });
+  document.getElementById(id).classList.remove("hidden");
+  clickSound();
+}
+
+function goHome() {
+  showPage("home");
+}
+
+function login() {
+  const role = document.getElementById("role").value;
+  const name = document.getElementById("username").value.trim();
+
+  if (!name) {
+    alert("Sila masukkan nama atau kod akses.");
+    return;
+  }
+
+  if (role === "guru" && name !== "GURU-KQ") {
+    alert("Kod guru tidak tepat. Gunakan GURU-KQ untuk demo.");
+    return;
+  }
+
+  if (role === "admin" && name !== "ADMIN-KQ") {
+    alert("Kod admin tidak tepat. Gunakan ADMIN-KQ untuk demo.");
+    return;
+  }
+
+  if (role === "murid") {
+    currentName = name;
+    document.getElementById("welcome").textContent = "Hai, " + name + "! 🐰";
+    renderPhases();
+    updateProgress();
+    showPage("student");
+  } else if (role === "guru") {
+    showPage("teacher");
+  } else {
+    showPage("admin");
+  }
+}
+
+/* PETA FASA */
+function renderPhases() {
+  const grid = document.getElementById("phaseGrid");
+  grid.innerHTML = "";
+
+  phases.forEach((p,i) => {
+    const card = document.createElement("div");
+    card.className = "tile";
+    card.innerHTML = `
+      <div class="emoji">${p.icon}</div>
+      <h3>Fasa ${i+1}: ${p.title}</h3>
+      <p class="small">${p.subtitle}</p>
+      <p>${finished.includes(i) ? "✅ Selesai" : "🔒 Teroka fasa"}</p>
+      <button onclick="openPhase(${i})">Masuk</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function openPhase(i) {
+  document.getElementById("phaseContent").innerHTML =
+    phases[i].content;
+
+  showPage("phase");
+
+  if (i === 2) renderDetective();
+  if (i === 5) renderChecklist();
+}
+
+function completePhase(i) {
+  if (!finished.includes(i)) {
+    finished.push(i);
+    xp += 20;
+  }
+
+  updateProgress();
+  renderPhases();
+  alert("Syabas! Awak memperoleh 20 XP! ⭐");
+  showPage("student");
+}
+
+function updateProgress() {
+  document.getElementById("xp").textContent = xp + " XP";
+  document.getElementById("level").textContent =
+    "Tahap " + (Math.floor(xp / 60) + 1);
+  document.getElementById("completed").textContent =
+    finished.length + "/6";
+  document.getElementById("bar").style.width =
+    (finished.length / 6 * 100) + "%";
+}
+
+/* DETEKTIF TULISAN */
+const detectiveQuestions = [
+  "Bunga berkembang di taman.",
+  "Ibu menyiram pokok bunga.",
+  "Saya suka membaca buku."
+];
+
+let detectiveIndex = 0;
+
+function renderDetective() {
+  detectiveIndex = 0;
+  showDetectiveQuestion();
+}
+
+function showDetectiveQuestion() {
+  const sentence = detectiveQuestions[detectiveIndex];
+
+  document.getElementById("detective").innerHTML = `
+    <h3>Soalan ${detectiveIndex+1} daripada 3</h3>
+    <p>Ayat: <b>${sentence}</b></p>
+    <div class="grid">
+      <button class="option" onclick="answerDetective(this,true)">
+        ✨ <span style="font-family:cursive;font-size:25px">${sentence}</span>
+        <br><small>Tulisan A</small>
+      </button>
+      <button class="option" onclick="answerDetective(this,false)">
+        ✨ <span style="font-family:Arial;font-size:17px;letter-spacing:3px">${sentence.toUpperCase()}</span>
+        <br><small>Tulisan B</small>
+      </button>
+    </div>
+    <p id="detectiveFeedback"></p>
+  `;
+}
+
+function answerDetective(button,correct) {
+  const feedback = document.getElementById("detectiveFeedback");
+
+  if (correct) {
+    feedback.textContent = "Betul! Bagus, Detektif Aksara! 🌟";
+    detectiveIndex++;
+
+    setTimeout(() => {
+      if (detectiveIndex < 3) {
+        showDetectiveQuestion();
+      } else {
+        completePhase(2);
+      }
+    },900);
+  } else {
+    feedback.textContent = "Cuba lagi. Perhatikan tulisan dengan teliti! 💗";
+  }
+}
+
+/* MUAT NAIK GAMBAR */
+function uploadPhoto() {
+  const file = document.getElementById("poemPhoto").files[0];
+
+  if (!file) {
+    alert("Sila pilih gambar terlebih dahulu.");
+    return;
+  }
+
+  document.getElementById("uploadStatus").textContent =
+    "Gambar dipilih: " + file.name +
+    ". Serahkan kepada guru melalui kaedah yang ditetapkan.";
+
+  completePhase(4);
+}
+
+/* SENARAI SEMAK 5S */
+const checklistItems = [
+  "Susunan: Adakah tulisan tersusun?",
+  "Sambungan: Adakah huruf disambungkan dengan sesuai?",
+  "Salinan: Adakah puisi disalin dengan tepat?",
+  "Saiz: Adakah saiz huruf konsisten?",
+  "Senang dibaca: Adakah tulisan jelas dan mudah dibaca?"
+];
+
+function renderChecklist() {
+  const area = document.getElementById("checklist");
+  area.innerHTML = checklistItems.map((item,i) => `
+    <label style="display:block;background:#fff5fa;padding:13px;border-radius:12px;margin:9px 0">
+      <input type="checkbox" class="fiveS" style="width:auto;margin-right:8px">
+      ${item}
+    </label>
+  `).join("");
+}
+
+function finishChecklist() {
+  const checks = document.querySelectorAll(".fiveS");
+  const total = [...checks].filter(c => c.checked).length;
+
+  if (total < 5) {
+    alert("Semak semua aspek 5S dahulu ya!");
+    return;
+  }
+
+  completePhase(5);
+}
+</script>
+
+</body>
+</html>
